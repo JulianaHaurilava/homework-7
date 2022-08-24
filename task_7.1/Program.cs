@@ -2,7 +2,7 @@
 using System.Linq;
 using task_7._1;
 
-namespace task_6._1
+namespace task_7._1
 {
     class Program
     {
@@ -58,7 +58,7 @@ namespace task_6._1
 
             while (true)
             {
-                Console.WriteLine("Что вы хотите сделать?" +
+                Console.WriteLine("Что вы хотите сделать?\n" +
                                   "Выберите соответствующее число.\n" +
                                   "1 - вывести данные на экран;\n" +
                                   "2 - найти сотрудника по ID\n" +
