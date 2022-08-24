@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using task_7._1;
 
 namespace task_7._1
 {
