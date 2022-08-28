@@ -5,9 +5,9 @@ namespace task_7._1
 {
     struct Worker
     {
-        public int id { get; set; } // ID
+        public ulong id { get; private set; } // ID
 
-        public DateTime creationTime { get; set; } // Дата и время создания записи
+        public DateTime creationTime { get; private set; } // Дата и время создания записи
 
         public string fullName { get; set; } // Ф.И.О.
 
@@ -19,37 +19,23 @@ namespace task_7._1
 
         public string nativeTown { get; set; } // Место рождения сотрудника
 
-        /// <summary>
-        /// Рассчитывает возраст сотрудника
-        /// </summary>
-        /// <param name="dateOfBirth"></param>
-        /// <returns>Возраст сотрудника</returns>
-        public static int GetAge(DateTime dateOfBirth)
+        public Worker(string fullName, DateTime dateOfBirth, 
+                      int age, int height, string nativeTown)
         {
-            return DateTime.Today.Year - dateOfBirth.Year -
-                ((DateTime.Today.Month > dateOfBirth.Month ||
-                  DateTime.Today.Month == dateOfBirth.Month && DateTime.Today.Day >= dateOfBirth.Day) ? 0 : 1);
+            creationTime = DateTime.Now;
+            string stringID = (creationTime.Year % 100).ToString() + creationTime.Month.ToString("00") +
+                              creationTime.Day.ToString("00") + creationTime.Hour.ToString("00") +
+                              creationTime.Minute.ToString("00") + creationTime.Second.ToString("00");
+            id = ulong.Parse(stringID);
+
+            creationTime = DateTime.Now;
+            this.fullName = fullName;
+            this.dateOfBirth = dateOfBirth;
+            this.age = age;
+            this.height = height;
+            this.nativeTown = nativeTown;
         }
 
-        /// <summary>
-        /// Запрашивает информацию о новом сотруднике
-        /// </summary>
-        public void GetNewWorkerInfo()
-        {
-            Console.WriteLine("Введите информацию о сотруднике.\n");
-            creationTime = DateTime.Now;
-            Console.WriteLine("Введите ID");
-            id = int.Parse(Console.ReadLine());
-            Console.WriteLine("Введите Ф.И.О.");
-            fullName = Console.ReadLine();
-            Console.WriteLine("Введите рост");
-            height = int.Parse(Console.ReadLine());
-            Console.WriteLine("Введите дату рождения");
-            dateOfBirth = DateTime.Parse(Console.ReadLine());
-            age = GetAge(dateOfBirth);
-            Console.WriteLine("Введите место рождения");
-            nativeTown = Console.ReadLine();
-        }
 
         /// <summary>
         /// Выводит информацию о конкретном сотруднике на экран
@@ -57,9 +43,9 @@ namespace task_7._1
         public void PrintWorker()
         {
             Console.WriteLine($"ID сотрудника: {id}\nДата и время добавления записи: {creationTime}\n" +
-                                 $"Ф.И.О. сотрудника: {fullName}\nВозраст сотрудника: {age}\n" +
-                                 $"Рост сотрудника: {height} см\nДата рождения: {dateOfBirth:dd.MM.yyyy}\n" +
-                                 $"Место рождения сотрудника: {nativeTown}\n");
+                                 $"Ф.И.О: {fullName}\nВозраст: {age}\n" +
+                                 $"Рост: {height} см\nДата рождения: {dateOfBirth:dd.MM.yyyy}\n" +
+                                 $"Место рождения: {nativeTown}\n");
         }
 
         /// <summary>
@@ -72,7 +58,7 @@ namespace task_7._1
         /// <param name="age"></param>
         /// <param name="height"></param>
         /// <param name="nativeTown"></param>
-        public void AddWorkerFromFile(int id, DateTime creationTime, string fullName,
+        public void AddWorkerFromFile(ulong id, DateTime creationTime, string fullName,
                       DateTime dateOfBirth, int age, int height, string nativeTown)
         {
             this.id = id;

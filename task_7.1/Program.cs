@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 
 namespace task_7._1
@@ -25,29 +26,72 @@ namespace task_7._1
         /// Сортирует сотрудников по выбранному полю
         /// </summary>
         /// <param name="r"></param>
-        static void SortWorkers(Repository r)
+        /// <param name="fileName"></param>
+        static void SortWorkers(Repository r, string fileName)
         {
-            Worker[] workers = r.GetAllWorkers();
-            if (workers[0].id != 0)
+            if (File.Exists(fileName))
             {
-                Console.WriteLine("По какому полю вы хотите отсортировать?" +
-                                              "Выберите соответствующее число.\n" +
-                                              "1 - ID\n2 - дата и время добавления записи\n" +
-                                              "3 - Ф.И.О.\n4 - возраст\n5 - рост\n" +
-                                              "Чтобы выйти из сортировщика нажмите любой другой символ.\n");
-                switch (Console.ReadKey(true).KeyChar)
+                string[] allWorkersArray = File.ReadAllLines(fileName);
+                Worker[] workers = r.GetAllWorkers(allWorkersArray);
+                if (workers.Length != 0)
                 {
-                    case '1': r.AllWorkers = workers.OrderBy(worker => worker.id).ToArray(); break;
-                    case '2': r.AllWorkers = workers.OrderBy(worker => worker.creationTime).ToArray(); break;
-                    case '3': r.AllWorkers = workers.OrderBy(worker => worker.fullName).ToArray(); break;
-                    case '4': r.AllWorkers = workers.OrderBy(worker => worker.age).ToArray(); break;
-                    case '5': r.AllWorkers = workers.OrderBy(worker => worker.height).ToArray(); break;
-                    default:
+                    if (workers[0].id != 0)
+                    {
+                        Console.WriteLine("По какому полю вы хотите отсортировать?" +
+                                                      "Выберите соответствующее число.\n" +
+                                                      "1 - ID\n2 - дата и время добавления записи\n" +
+                                                      "3 - Ф.И.О.\n4 - возраст\n5 - рост\n" +
+                                                      "Чтобы выйти из сортировщика нажмите любой другой символ.\n");
+                        switch (Console.ReadKey(true).KeyChar)
+                        {
+                            case '1': workers = workers.OrderBy(worker => worker.id).ToArray(); break;
+                            case '2': workers = workers.OrderBy(worker => worker.creationTime).ToArray(); break;
+                            case '3': workers = workers.OrderBy(worker => worker.fullName).ToArray(); break;
+                            case '4': workers = workers.OrderBy(worker => worker.age).ToArray(); break;
+                            case '5': workers = workers.OrderBy(worker => worker.height).ToArray(); break;
+                            default:
+                                return;
+                        }
+
+                        r.RewriteFileAndArray(workers);
                         return;
+                    }
                 }
-                r.RewriteFile(r.AllWorkers);
             }
-            else Console.WriteLine("Записей о сотрудниках нет.");
+            Console.WriteLine("Записей о сотрудниках нет.");
+        }
+
+        /// <summary>
+        /// Рассчитывает возраст сотрудника
+        /// </summary>
+        /// <param name="dateOfBirth"></param>
+        /// <returns>Возраст сотрудника</returns>
+        private static int GetAge(DateTime dateOfBirth)
+        {
+            return DateTime.Today.Year - dateOfBirth.Year -
+                ((DateTime.Today.Month > dateOfBirth.Month ||
+                  DateTime.Today.Month == dateOfBirth.Month && DateTime.Today.Day >= dateOfBirth.Day) ? 0 : 1);
+        }
+
+        /// <summary>
+        /// Создает нового сотрудника на основании введенных в консоль данных
+        /// </summary>
+        /// <returns>Нового сотрудника</returns>
+        static private Worker CreateWorkerFromConsole()
+        {
+            Console.WriteLine("Введите информацию о сотруднике.\n");
+
+            Console.WriteLine("Введите Ф.И.О.");
+            string fullName = Console.ReadLine();
+            Console.WriteLine("Введите рост");
+            int height = int.Parse(Console.ReadLine());
+            Console.WriteLine("Введите дату рождения");
+            DateTime dateOfBirth = DateTime.Parse(Console.ReadLine());
+            int age = GetAge(dateOfBirth);
+            Console.WriteLine("Введите место рождения");
+            string nativeTown = Console.ReadLine();
+            Worker newWorker = new Worker(fullName, dateOfBirth, age, height, nativeTown);
+            return newWorker;
         }
 
         static void Main(string[] args)
@@ -79,7 +123,7 @@ namespace task_7._1
                         {
                             Console.Clear();
                             Console.WriteLine("Введите ID сотрудника, которого хотите найти.");
-                            int id = int.Parse(Console.ReadLine());
+                            ulong id = ulong.Parse(Console.ReadLine());
                             Worker worker = r.FindWorkerByID(id);
                             if (worker.id != 0)
                             {
@@ -91,14 +135,15 @@ namespace task_7._1
                     case '3':
                         {
                             Console.Clear();
-                            r.AddWorker();
+                            Worker newWorker = CreateWorkerFromConsole();
+                            r.AddWorker(newWorker);
                             break;
                         }
                     case '4':
                         {
                             Console.Clear();
                             Console.WriteLine("Введите ID сотрудника, которого хотите удалить.");
-                            int id = int.Parse(Console.ReadLine());
+                            ulong id = ulong.Parse(Console.ReadLine());
                             r.DeleteWorker(id);
                             break;
                         }
@@ -111,13 +156,21 @@ namespace task_7._1
                             Console.Write("По ");
                             dateTo = CheckAndGetDate();
                             Console.WriteLine();
-                            r.GetWorkersBetweenTwoDates(dateFrom, dateTo);
+                            Worker[] workers = r.GetWorkersBetweenTwoDates(dateFrom, dateTo);
+                            if (!(workers == null || workers[0].id == 0))
+                            {
+                                for (int i = 0; i < workers.Length; i++)
+                                {
+                                    workers[i].PrintWorker();
+                                }
+                            }
+                            else Console.WriteLine($"Нет записей в период с {dateFrom} по {dateTo}.");
                             break;
                         }
                     case '6':
                         {
                             Console.Clear();
-                            SortWorkers(r);
+                            SortWorkers(r, fileName);
                             break;
                         }
                     default: return;
