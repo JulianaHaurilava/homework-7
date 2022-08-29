@@ -35,27 +35,26 @@ namespace task_7._1
                 Worker[] workers = r.GetAllWorkers(allWorkersArray);
                 if (workers.Length != 0)
                 {
-                    if (workers[0].id != 0)
-                    {
-                        Console.WriteLine("По какому полю вы хотите отсортировать?" +
-                                                      "Выберите соответствующее число.\n" +
-                                                      "1 - ID\n2 - дата и время добавления записи\n" +
-                                                      "3 - Ф.И.О.\n4 - возраст\n5 - рост\n" +
-                                                      "Чтобы выйти из сортировщика нажмите любой другой символ.\n");
-                        switch (Console.ReadKey(true).KeyChar)
-                        {
-                            case '1': workers = workers.OrderBy(worker => worker.id).ToArray(); break;
-                            case '2': workers = workers.OrderBy(worker => worker.creationTime).ToArray(); break;
-                            case '3': workers = workers.OrderBy(worker => worker.fullName).ToArray(); break;
-                            case '4': workers = workers.OrderBy(worker => worker.age).ToArray(); break;
-                            case '5': workers = workers.OrderBy(worker => worker.height).ToArray(); break;
-                            default:
-                                return;
-                        }
 
-                        r.RewriteFileAndArray(workers);
-                        return;
+                    Console.WriteLine("По какому полю вы хотите отсортировать?" +
+                                                  "Выберите соответствующее число.\n" +
+                                                  "1 - ID\n2 - дата и время добавления записи\n" +
+                                                  "3 - Ф.И.О.\n4 - возраст\n5 - рост\n" +
+                                                  "Чтобы выйти из сортировщика нажмите любой другой символ.\n");
+                    switch (Console.ReadKey(true).KeyChar)
+                    {
+                        case '1': workers = workers.OrderBy(worker => worker.id).ToArray(); break;
+                        case '2': workers = workers.OrderBy(worker => worker.creationTime).ToArray(); break;
+                        case '3': workers = workers.OrderBy(worker => worker.fullName).ToArray(); break;
+                        case '4': workers = workers.OrderBy(worker => worker.age).ToArray(); break;
+                        case '5': workers = workers.OrderBy(worker => worker.height).ToArray(); break;
+                        default:
+                            return;
                     }
+
+                    r.RewriteFileAndArray(workers);
+                    return;
+
                 }
             }
             Console.WriteLine("Записей о сотрудниках нет.");
@@ -157,14 +156,14 @@ namespace task_7._1
                             dateTo = CheckAndGetDate();
                             Console.WriteLine();
                             Worker[] workers = r.GetWorkersBetweenTwoDates(dateFrom, dateTo);
-                            if (!(workers == null || workers[0].id == 0))
+                            if (workers.Length != 0 && workers[0].id != 0)
                             {
                                 for (int i = 0; i < workers.Length; i++)
                                 {
                                     workers[i].PrintWorker();
                                 }
                             }
-                            else Console.WriteLine($"Нет записей в период с {dateFrom} по {dateTo}.");
+                            else Console.WriteLine($"Нет записей в период с {dateFrom.ToShortDateString()} по {dateTo.ToShortDateString()}.");
                             break;
                         }
                     case '6':

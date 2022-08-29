@@ -17,20 +17,21 @@ namespace task_7._1
         {
             this.fileName = fileName;
             workerInfo = new string[7];
-            
+
 
             if (File.Exists(fileName))
             {
                 string[] allWorkersArray = File.ReadAllLines(fileName);
-                int numberOfWorkers = allWorkersArray.Length;
-                allWorkers = new Worker[numberOfWorkers + 1];
-                GetAllWorkers(allWorkersArray);
+                if (allWorkersArray.Length != 0)
+                {
+                    allWorkers = GetAllWorkers(allWorkersArray);
+                    return;
+                }
+                
             }
-            else
-            {
-                position = 0;
-                allWorkers = new Worker[1];
-            }
+
+            position = 0;
+            allWorkers = new Worker[1];
         }
 
         /// <summary>
@@ -40,11 +41,11 @@ namespace task_7._1
         public Worker[] GetAllWorkers(string[] allWorkersArray)
         {
             position = 0;
-
+            Worker[] allWorkersFromFile = new Worker[allWorkersArray.Length];
             foreach (string worker in allWorkersArray)
             {
                 workerInfo = worker.Split('#');
-                allWorkers[position++].AddWorkerFromFile(ulong.Parse(workerInfo[0]),
+                allWorkersFromFile[position++].AddWorkerFromFile(ulong.Parse(workerInfo[0]),
                                                          DateTime.Parse(workerInfo[1]),
                                                          workerInfo[2],
                                                          DateTime.Parse(workerInfo[5]),
@@ -53,7 +54,7 @@ namespace task_7._1
                                                          workerInfo[6].Substring(6));
             }
 
-            return allWorkers;
+            return allWorkersFromFile;
         }
 
         /// <summary>
