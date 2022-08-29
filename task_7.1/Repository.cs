@@ -79,7 +79,7 @@ namespace task_7._1
         {
             for (int i = 0; i < position; i++)
             {
-                if (allWorkers[i].id == findID)
+                if (allWorkers[i].ID == findID)
                 {
                     return allWorkers[i];
                 }
@@ -98,7 +98,7 @@ namespace task_7._1
         {
             for (int i = 0; i < position; i++)
             {
-                if (allWorkers[i].id == findID)
+                if (allWorkers[i].ID == findID)
                 {
                     return i;
                 }
@@ -115,28 +115,33 @@ namespace task_7._1
         /// <returns>Массив сотрудников</returns>
         public Worker[] GetWorkersBetweenTwoDates(DateTime dateFrom, DateTime dateTo)
         {
-            Worker[] workersBetweenTwoDates = new Worker[position];
+            Worker[] workersBetweenTwoDates = new Worker[1];
             int newPosition = 0;
             for (int i = 0; i < position; i++)
             {
-                if (allWorkers[i].creationTime <= dateTo && allWorkers[i].creationTime >= dateFrom)
+                if (allWorkers[i].CreationTime <= dateTo && allWorkers[i].CreationTime >= dateFrom)
                 {
+                    workersBetweenTwoDates = Resize(newPosition >= workersBetweenTwoDates.Length, workersBetweenTwoDates);
                     workersBetweenTwoDates[newPosition++] = allWorkers[i];
                 }
             }
+            Array.Resize(ref workersBetweenTwoDates, newPosition);
             return workersBetweenTwoDates;
         }
 
         /// <summary>
-        /// Увеличивает размер массива allWorkers в два раза + 1, если для записи новой информации нет места
+        /// Увеличивает размер массива в два раза + 1, если для записи новой информации нет места
         /// </summary>
         /// <param name="indexOutOfRange"></param>
-        private void Resize(bool indexOutOfRange)
+        /// <param name="array"></param>
+        /// <returns>Увеличенный массив</returns>
+        private Worker[] Resize(bool indexOutOfRange, Worker[] array)
         {
             if (indexOutOfRange)
             {
-                Array.Resize(ref allWorkers, allWorkers.Length * 2 + 1);
+                Array.Resize(ref array, array.Length * 2 + 1);
             }
+            return array;
         }
 
         /// <summary>
@@ -145,7 +150,7 @@ namespace task_7._1
         /// <param name="newWorker"></param>
         private void AddWorkerToArray(Worker newWorker)
         {
-            Resize(position >= allWorkers.Length);
+            allWorkers = Resize(position >= allWorkers.Length, allWorkers);
             allWorkers[position++] = newWorker;
         }
 

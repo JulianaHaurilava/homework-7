@@ -43,11 +43,11 @@ namespace task_7._1
                                                   "Чтобы выйти из сортировщика нажмите любой другой символ.\n");
                     switch (Console.ReadKey(true).KeyChar)
                     {
-                        case '1': workers = workers.OrderBy(worker => worker.id).ToArray(); break;
-                        case '2': workers = workers.OrderBy(worker => worker.creationTime).ToArray(); break;
-                        case '3': workers = workers.OrderBy(worker => worker.fullName).ToArray(); break;
-                        case '4': workers = workers.OrderBy(worker => worker.age).ToArray(); break;
-                        case '5': workers = workers.OrderBy(worker => worker.height).ToArray(); break;
+                        case '1': workers = workers.OrderBy(worker => worker.ID).ToArray(); break;
+                        case '2': workers = workers.OrderBy(worker => worker.CreationTime).ToArray(); break;
+                        case '3': workers = workers.OrderBy(worker => worker.FullName).ToArray(); break;
+                        case '4': workers = workers.OrderBy(worker => worker.Age).ToArray(); break;
+                        case '5': workers = workers.OrderBy(worker => worker.Height).ToArray(); break;
                         default:
                             return;
                     }
@@ -124,7 +124,7 @@ namespace task_7._1
                             Console.WriteLine("Введите ID сотрудника, которого хотите найти.");
                             ulong id = ulong.Parse(Console.ReadLine());
                             Worker worker = r.FindWorkerByID(id);
-                            if (worker.id != 0)
+                            if (worker.ID != 0)
                             {
                                 worker.PrintWorker();
                             }
@@ -156,7 +156,7 @@ namespace task_7._1
                             dateTo = CheckAndGetDate();
                             Console.WriteLine();
                             Worker[] workers = r.GetWorkersBetweenTwoDates(dateFrom, dateTo);
-                            if (workers.Length != 0 && workers[0].id != 0)
+                            if (workers.Length != 0 && workers[0].ID != 0)
                             {
                                 for (int i = 0; i < workers.Length; i++)
                                 {
