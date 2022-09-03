@@ -19,8 +19,8 @@ namespace task_7._1
 
         public string NativeTown { get; set; } // Место рождения сотрудника
 
-        public Worker(string FullName, DateTime DateOfBirth, 
-                      int Age, int Height, string NativeTown)
+        public Worker(string fullName, DateTime dateOfBirth, 
+                      int age, int height, string nativeTown)
         {
             CreationTime = DateTime.Now;
             string stringID = (CreationTime.Year % 100).ToString() + CreationTime.Month.ToString("00") +
@@ -29,11 +29,11 @@ namespace task_7._1
             ID = ulong.Parse(stringID);
 
             CreationTime = DateTime.Now;
-            this.FullName = FullName;
-            this.DateOfBirth = DateOfBirth;
-            this.Age = Age;
-            this.Height = Height;
-            this.NativeTown = NativeTown;
+            FullName = fullName;
+            DateOfBirth = dateOfBirth;
+            Age = age;
+            Height = height;
+            NativeTown = nativeTown;
         }
 
 
@@ -51,23 +51,23 @@ namespace task_7._1
         /// <summary>
         /// Считывает информацию о сотруднике из файла и инициализирует поля структуры
         /// </summary>
-        /// <param name="ID"></param>
-        /// <param name="CreationTime"></param>
-        /// <param name="FullName"></param>
-        /// <param name="DateOfBirth"></param>
-        /// <param name="Age"></param>
-        /// <param name="Height"></param>
-        /// <param name="NativeTown"></param>
-        public void AddWorkerFromFile(ulong ID, DateTime CreationTime, string FullName,
-                      DateTime DateOfBirth, int Age, int Height, string NativeTown)
+        /// <param name="id"></param>
+        /// <param name="creationTime"></param>
+        /// <param name="fullName"></param>
+        /// <param name="dateOfBirth"></param>
+        /// <param name="age"></param>
+        /// <param name="height"></param>
+        /// <param name="nativeTown"></param>
+        public void AddWorkerFromFile(ulong id, DateTime creationTime, string fullName,
+                      DateTime dateOfBirth, int age, int height, string nativeTown)
         {
-            this.ID = ID;
-            this.CreationTime = CreationTime;
-            this.FullName = FullName;
-            this.DateOfBirth = DateOfBirth;
-            this.Age = Age;
-            this.Height = Height;
-            this.NativeTown = NativeTown;
+            ID = id;
+            CreationTime = creationTime;
+            FullName = fullName;
+            DateOfBirth = dateOfBirth;
+            Age = age;
+            Height = height;
+            NativeTown = nativeTown;
         }
 
         /// <summary>

@@ -156,14 +156,11 @@ namespace task_7._1
                             dateTo = CheckAndGetDate();
                             Console.WriteLine();
                             Worker[] workers = r.GetWorkersBetweenTwoDates(dateFrom, dateTo);
-                            if (workers.Length != 0 && workers[0].ID != 0)
+                            for (int i = 0; i < workers.Length; i++)
                             {
-                                for (int i = 0; i < workers.Length; i++)
-                                {
-                                    workers[i].PrintWorker();
-                                }
+                                workers[i].PrintWorker();
                             }
-                            else Console.WriteLine($"Нет записей в период с {dateFrom.ToShortDateString()} по {dateTo.ToShortDateString()}.");
+                            if (workers.Length == 0) Console.WriteLine($"Нет записей в период с {dateFrom.ToShortDateString()} по {dateTo.ToShortDateString()}.");
                             break;
                         }
                     case '6':
